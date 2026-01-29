@@ -61,7 +61,7 @@ mkdir -p ${HOME}/.openasip
 touch -a "${lastOkRevisionFile}"
 
 # Process command line arguments (from Advanced Bash-Scripting Guide).
-while getopts "vhngqckmsuiIt" Option
+while getopts "vhngqckmsuiItj:" Option
 do
     case $Option in
         v     ) 
@@ -115,8 +115,17 @@ do
 
         tagIfSuccess=yes;;
 
-        h     ) 
+        j     )
+        case $OPTARG in
+            ''|*[!0-9]*)
+                echo "Couldn't parse -j flag, running serially";;
+            *)
+                systemtestFlags=-p$OPTARG
+                ;;
+        esac
+        ;;
 
+        h     )
         echo "TCE compile&test script (c) 2003-2013 Pekka J��skel�inen";
         echo
         echo "switches: ";
